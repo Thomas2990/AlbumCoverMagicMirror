@@ -34,11 +34,17 @@ module.exports = NodeHelper.create({
 				payload: payload
 			};
 
-			self.ws.send(JSON.stringify(obj), function ack(error){
-				if(error) {
-					self.error("Error while sending obj: ", obj);
+			//self.ws.send(JSON.stringify(obj), function ack(error){
+			self.ws.clients.forEach(function each(client) {
+				if(client.readyState === WebSocket.OPEN) {
+					client.send(JSON.stringify(obj));
 				}
 			});
+			//self.ws.send(notification, function ack(error){
+			//	if(error) {
+			//		self.error("Error while sending obj: ", obj);
+			//	}
+			//});
 		} else {
 			self.debug("Can not send notification because WebSocket is not yet connected!", notification)
 		}

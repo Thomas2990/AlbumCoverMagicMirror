@@ -32,14 +32,16 @@ Module.register("MMM-websocket", {
 		var self = this;
 
 		// Check if outgoing notification is wanted
-		if (self.executeFilter(self.config.outgoingFilter, notification, payload)) {
-			self.debug("Wanted outgoing global notification: ", notification, payload);
-			var transformed = self.executeTransform(self.config.outgoingTransformer, notification, payload);
-			self.debug("Wanted outgoing global notification after transformation: ", transformed.notification, transformed.payload);
-			self.sendSocketNotification(transformed.notification, transformed.payload);
-		} else {
-			self.debug("Unwanted outgoing global notification: ", notification, payload);
+		//if (self.executeFilter(self.config.outgoingFilter, notification, payload)) {
+			//self.debug("Wanted outgoing global notification: ", notification, payload);
+			//var transformed = self.executeTransform(self.config.outgoingTransformer, notification, payload);
+			//self.debug("Wanted outgoing global notification after transformation: ", transformed.notification, transformed.payload);
+		if(notification === "SPOTIFY_PAYLOAD") {
+			self.sendSocketNotification(notification, payload);
 		}
+		//} else {
+		//	self.debug("Unwanted outgoing global notification: ", notification, payload);
+		//}
 	},
 
 	// Override socket notification received

@@ -59,6 +59,7 @@ Module.register('MMM-NowPlayingOnSpotify', {
         this.initialized = true;
         this.context = payload;
         this.updateDom();
+	this.sendNotification("SPOTIFY_PAYLOAD", payload);
     }
   },
 

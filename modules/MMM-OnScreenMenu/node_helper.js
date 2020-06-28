@@ -87,6 +87,8 @@ module.exports = NodeHelper.create({
                 win = require("electron").BrowserWindow.getFocusedWindow();
                 win.webContents.openDevTools();
                 break;
+	    case "update":
+		exec("git pull origin master", opts, (error,stdout,stderr) => { self.checkForExecError(error,stdout,stderr); });
             default:
                 // Should never get here, but OK:
                 console.log(`MMM-OnScreenMenu Helper received request to process a ${payload} event
