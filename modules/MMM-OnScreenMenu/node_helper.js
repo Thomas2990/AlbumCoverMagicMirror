@@ -91,6 +91,7 @@ module.exports = NodeHelper.create({
                 break;
 	    case "update":
 		exec("cd && cd MagicMirror && git pull origin master", opts, (error,stdout,stderr) => { self.checkForExecError(error,stdout,stderr); });
+		break;
             default:
                 // Should never get here, but OK:
                 console.log(`MMM-OnScreenMenu Helper received request to process a ${payload} event
