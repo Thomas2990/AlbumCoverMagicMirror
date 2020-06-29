@@ -5,6 +5,7 @@
  * MIT Licensed.
  * FFFFF
  * YUh
+ * Superman aint got shit
  */
 /* jshint node: true, esversion: 6*/
 
