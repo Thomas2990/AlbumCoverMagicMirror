@@ -127,6 +127,9 @@ module.exports = NodeHelper.create({
 			case "changeSpotifyAccount":
 			   self.sendSocketNotification("SPOTIFY_CHANGE_ACCOUNT", "");
                            break;
+			case "update":
+			   self.sendSocketNotification("ONSCREENMENU_PROCESS_ACTION", "update");
+			   break;
 			default:
 			   break;
                 }

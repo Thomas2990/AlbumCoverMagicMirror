@@ -1,4 +1,7 @@
 # Various Node ignoramuses.
+#personal user files
+spotifyConfig.json
+spotifyConfig2.json
 
 logs
 *.log
@@ -60,10 +63,8 @@ Temporary Items
 .Trash-*
 
 # Ignore all modules except the default modules.
-/
 
 # Ignore changes to the custom css files.
-
 
 # Vim
 ## swap
