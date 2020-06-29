@@ -4,6 +4,7 @@
  * By shbatm
  * MIT Licensed.
  * currently in use by your boy
+ * uh, skinny penis
  */
 /* jshint node: true, esversion: 6*/
 
