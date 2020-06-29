@@ -3,8 +3,7 @@
  *
  * By shbatm
  * MIT Licensed.
- * currently in use by your boy
- * uh, skinny penis
+ * FFFFF
  */
 /* jshint node: true, esversion: 6*/
 
