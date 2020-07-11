@@ -38,6 +38,8 @@ Module.register("MMM-websocket", {
 			//self.debug("Wanted outgoing global notification after transformation: ", transformed.notification, transformed.payload);
 		if(notification === "SPOTIFY_PAYLOAD") {
 			self.sendSocketNotification(notification, payload);
+		} else if(notification === "STATE_PAYLOAD_FINISHED") {
+			self.sendSocketNotification(notification, payload);
 		}
 		//} else {
 		//	self.debug("Unwanted outgoing global notification: ", notification, payload);

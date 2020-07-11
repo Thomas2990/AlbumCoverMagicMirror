@@ -40,6 +40,7 @@ module.exports = NodeHelper.create({
 					client.send(JSON.stringify(obj));
 				}
 			});
+
 			//self.ws.send(notification, function ack(error){
 			//	if(error) {
 			//		self.error("Error while sending obj: ", obj);
@@ -66,48 +67,11 @@ module.exports = NodeHelper.create({
                           callback();
                         }
                 });
-		// Register error listener
-		//self.ws.onerror = function(event){
-		//	if(callback) {
-		//		callback(event.code)
-		//	}
-		//};
-
-		// Register open listener
-
-		//self.ws.onopen = function open() {
-			//self.debug("Connection established:", url);
-
-			// Register on close listener
-			//self.ws.onclose = function close(event) {
-			//	self.error("Connection was closed!", event.code, event.reason);
-			//	self.reconnect(config);
-			//};
-
-			// Register message handler
-			//self.ws.onmessage = function message(event) {
-			//	try {
-			//		self.sendMessage(JSON.parse(event.data));
-			//	} catch(error) {
-			//		self.error("Error while handling event:", event, error);
-			//	}
-			//};
-
-			// Notify callback if needed
-		//	if(callback) {
-		//		callback();
-		//	}
-		//};
 	},
 
 	sendMessage: function(event) {
 		var self = this;
 		self.debug("Send event: ", event);
-                //if(event === "on") {
-                //  self.sendSocketNotification("SPOTIFY_WAKE", "");
-                //} else if(event === "off") {
-                //  self.sendSocketNotification("SPOTIFY_SLEEP", "");
-                //}
 		switch(event) {
 			case "on":
 			   self.sendSocketNotification("SPOTIFY_WAKE", "");
@@ -129,6 +93,9 @@ module.exports = NodeHelper.create({
                            break;
 			case "update":
 			   self.sendSocketNotification("ONSCREENMENU_PROCESS_ACTION", "update");
+			   break;
+			case "startup":
+			   self.sendSocketNotification("STATE_PAYLOAD_ONE", "");
 			   break;
 			default:
 			   break;

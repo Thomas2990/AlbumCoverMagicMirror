@@ -70,9 +70,11 @@ Module.register('MMM-NowPlayingOnSpotify', {
      } else if (notification === "SPOTIFY_WAKE") {
         this.sleep = false;
 	this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOn");
-     }
-      else if (notification === "SPOTIFY_CHANGE_ACCOUNT") {
+     } else if (notification === "SPOTIFY_CHANGE_ACCOUNT") {
 	this.sendSocketNotification('SPOTIFY_CHANGE_ACCOUNT');
+     } else if (notification === "STATE_PAYLOAD_ONE") {
+	var stateJSON = { power: !this.sleep };
+	this.sendNotification("STATE_PAYLOAD_FINISHED", stateJSON);
      }
   },
 
