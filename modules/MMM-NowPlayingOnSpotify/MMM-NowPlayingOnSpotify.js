@@ -22,6 +22,7 @@ Module.register('MMM-NowPlayingOnSpotify', {
     this.currentCoverArt = "-";
     this.startFetchingLoop();
     this.sleep = false;
+    this.latestSong = {};
   },
 
   getDom: function () {
@@ -56,15 +57,41 @@ Module.register('MMM-NowPlayingOnSpotify', {
     console.log("socket notification in main: " + notification + " Payload: " + payload);
     switch (notification) {
       case 'RETRIEVED_SONG_DATA':
+	if(!payload.noSong) {
+	  this.latestSong = payload;
+	}
         this.initialized = true;
         this.context = payload;
         this.updateDom();
 	this.sendNotification("SPOTIFY_PAYLOAD", payload);
+	break;
+      case 'RETRIEVED_LATEST_SONG_DATA':
+        this.sendNotification("STATE_PAYLOAD_TWO", payload);
+	break;
     }
   },
 
   notificationReceived: function (notification, payload, sender) {
-     if (notification === "SPOTIFY_SLEEP") {
+     switch (notification) {
+	case 'SPOTIFY_SLEEP':
+	   this.sleep = true;
+           this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOff");
+	   break;
+	case 'SPOTIFY_WAKE':
+	   this.sleep = false;
+	   this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOn");
+           break;
+        case 'SPOTIFY_CHANGE_ACCOUNT':
+           this.sendSocketNotification('SPOTIFY_CHANGE_ACCOUNT');
+	   break;
+        case 'STATE_PAYLOAD_ONE':
+           var state = JSON.parse(JSON.stringify(this.latestSong));
+	   state.power = !this.sleep;
+           this.sendNotification("STATE_PAYLOAD_FINISHED", state);
+	   break;
+     }
+
+     /*if (notification === "SPOTIFY_SLEEP") {
         this.sleep = true;
         this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOff");
      } else if (notification === "SPOTIFY_WAKE") {
@@ -75,7 +102,7 @@ Module.register('MMM-NowPlayingOnSpotify', {
      } else if (notification === "STATE_PAYLOAD_ONE") {
 	var stateJSON = { power: !this.sleep };
 	this.sendNotification("STATE_PAYLOAD_FINISHED", stateJSON);
-     }
+     }*/
   },
 
   startFetchingLoop() {

@@ -65,7 +65,7 @@ module.exports = NodeHelper.create({
         }
       })
       .catch((error) => {
-        console.error('Canâ€™t retrieve current song. Reason: ');
+        console.error('Can’t retrieve current song. Reason: ');
         console.error(error);
       });
   },
