@@ -97,6 +97,12 @@ module.exports = NodeHelper.create({
 			case "startup":
 			   self.sendSocketNotification("STATE_PAYLOAD_ONE", "");
 			   break;
+			case "next":
+			   self.sendSocketNotification("SPOTIFY_NEXT_SONG", "");
+			   break;
+			case "previous":
+			   self.sendSocketNotification("SPOTIFY_PREV_SONG", "");
+			   break;
 			default:
 			   break;
                 }
