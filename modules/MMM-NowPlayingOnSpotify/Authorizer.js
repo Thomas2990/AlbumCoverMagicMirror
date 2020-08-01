@@ -70,7 +70,7 @@ let redirect_uri = '';
 
   function redirectToAuthorization(response, state) {
   // your application requests authorization
-  const scope = 'user-read-playback-state user-read-currently-playing';
+  const scope = 'user-read-playback-state user-read-currently-playing user-modify-playback-state';
   let url = 'https://accounts.spotify.com/authorize?';
   let urlParams = {
     response_type: 'code',
