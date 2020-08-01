@@ -38,6 +38,14 @@ module.exports = NodeHelper.create({
 	this.authorizer = new Authorizer();
 	this.authorizer.startServer();
         break;
+		    
+      case 'NEXT_SONG':
+	 this.requestNextSong();
+         break;
+    
+      case 'PREV_SONG':
+         this.requestPreviousSong();
+         break;
     }
   },
 
@@ -65,7 +73,7 @@ module.exports = NodeHelper.create({
         }
       })
       .catch((error) => {
-        console.error('Can’t retrieve current song. Reason: ');
+        console.error('Canâ€™t retrieve current song. Reason: ');
         console.error(error);
       });
   },
@@ -89,7 +97,14 @@ module.exports = NodeHelper.create({
 
     this.sendSocketNotification('RETRIEVED_SONG_DATA', payload);
   },
-
+  
+  requestNextSong: function() {
+    this.connector.requestNextSong();
+  },
+	
+  requestPreviousSong: function() {
+    this.connector.requestPreviousSong();
+  },
 
   getArtistName: function (artists) {
     return artists.map((artist) => {
