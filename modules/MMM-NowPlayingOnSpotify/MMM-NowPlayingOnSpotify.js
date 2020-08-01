@@ -89,20 +89,13 @@ Module.register('MMM-NowPlayingOnSpotify', {
 	   state.power = !this.sleep;
            this.sendNotification("STATE_PAYLOAD_FINISHED", state);
 	   break;
+        case 'SPOTIFY_NEXT_SONG':
+	   this.sendSocketNotification('NEXT_SONG');
+	   break;
+        case 'SPOTIFY_PREV_SONG':
+	   this.sendSocketNotificaiton('PREV_SONG');
+	   break;
      }
-
-     /*if (notification === "SPOTIFY_SLEEP") {
-        this.sleep = true;
-        this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOff");
-     } else if (notification === "SPOTIFY_WAKE") {
-        this.sleep = false;
-	this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOn");
-     } else if (notification === "SPOTIFY_CHANGE_ACCOUNT") {
-	this.sendSocketNotification('SPOTIFY_CHANGE_ACCOUNT');
-     } else if (notification === "STATE_PAYLOAD_ONE") {
-	var stateJSON = { power: !this.sleep };
-	this.sendNotification("STATE_PAYLOAD_FINISHED", stateJSON);
-     }*/
   },
 
   startFetchingLoop() {
