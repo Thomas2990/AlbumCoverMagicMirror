@@ -43,7 +43,7 @@ module.exports = NodeHelper.create({
 	 this.requestNextSong();
          break;
     
-      case 'PREV_SONG':
+      case 'PREVIOUS_SONG':
          this.requestPreviousSong();
          break;
     }
