@@ -101,7 +101,7 @@ module.exports = NodeHelper.create({
 			   self.sendSocketNotification("SPOTIFY_NEXT_SONG", "");
 			   break;
 			case "previous":
-			   self.sendSocketNotification("SPOTIFY_PREV_SONG", "");
+			   self.sendSocketNotification("SPOTIFY_PREVIOUS_SONG", "");
 			   break;
 			default:
 			   break;
