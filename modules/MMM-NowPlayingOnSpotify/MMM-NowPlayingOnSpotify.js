@@ -93,7 +93,7 @@ Module.register('MMM-NowPlayingOnSpotify', {
 	   this.sendSocketNotification('NEXT_SONG');
 	   break;
         case 'SPOTIFY_PREVIOUS_SONG':
-	   this.sendSocketNotificaiton('PREVIOUS_SONG');
+	   this.sendSocketNotification('PREVIOUS_SONG');
 	   break;
      }
   },
