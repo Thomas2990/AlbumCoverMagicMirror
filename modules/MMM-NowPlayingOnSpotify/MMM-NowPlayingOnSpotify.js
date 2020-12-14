@@ -73,28 +73,37 @@ Module.register('MMM-NowPlayingOnSpotify', {
 
   notificationReceived: function (notification, payload, sender) {
      switch (notification) {
+	case 'SPOTIFY_TOGGLE':
+	  if (this.sleep) {
+	    this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOn");
+	  }
+          else {
+            this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOff");
+	  }
+	  this.sleep = !this.sleep;
+	  break;
 	case 'SPOTIFY_SLEEP':
-	   this.sleep = true;
-           this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOff");
-	   break;
+	  this.sleep = true;
+          this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOff");
+	  break;
 	case 'SPOTIFY_WAKE':
-	   this.sleep = false;
-	   this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOn");
-           break;
+          this.sleep = false;
+          this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOn");
+          break;
         case 'SPOTIFY_CHANGE_ACCOUNT':
-           this.sendSocketNotification('SPOTIFY_CHANGE_ACCOUNT');
-	   break;
+          this.sendSocketNotification('SPOTIFY_CHANGE_ACCOUNT');
+          break;
         case 'STATE_PAYLOAD_ONE':
-           var state = JSON.parse(JSON.stringify(this.latestSong));
-	   state.power = !this.sleep;
-           this.sendNotification("STATE_PAYLOAD_FINISHED", state);
-	   break;
+          var state = JSON.parse(JSON.stringify(this.latestSong));
+          state.power = !this.sleep;
+          this.sendNotification("STATE_PAYLOAD_FINISHED", state);
+          break;
         case 'SPOTIFY_NEXT_SONG':
-	   this.sendSocketNotification('NEXT_SONG');
-	   break;
+          this.sendSocketNotification('NEXT_SONG');
+          break;
         case 'SPOTIFY_PREVIOUS_SONG':
-	   this.sendSocketNotification('PREVIOUS_SONG');
-	   break;
+	  this.sendSocketNotification('PREVIOUS_SONG');
+	  break;
      }
   },
 
