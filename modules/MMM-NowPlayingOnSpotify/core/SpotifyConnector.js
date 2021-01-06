@@ -7,6 +7,11 @@ const tokenRefreshEndpoint = 'https://accounts.spotify.com/api/token';
 const apiEndpoint = 'https://api.spotify.com/v1/me/player';
 const nextSongEndpoint = 'https://api.spotify.com/v1/me/player/next';
 const previousSongEndpoint = 'https://api.spotify.com/v1/me/player/previous';
+const pauseSongEndpoint = 'https://api.spotify.com/v1/me/player/pause';
+const playSongEndpoint = 'https://api.spotify.com/v1/me/player/play';
+const playerEndpoint = 'https://api.spotify.com/v1/me/player/';
+const play = 'play';
+const pause = 'pause';
 
 module.exports = class SpotifyConnector {
 
@@ -36,7 +41,7 @@ module.exports = class SpotifyConnector {
         });
     }
   }
-  
+
   requestNextSong() {
     /*if (moment().isBefore(this.tokenExpiresAt)) {
       return this.nextSong();
@@ -57,11 +62,19 @@ module.exports = class SpotifyConnector {
           console.error(err);
         });
     } MIGHT CAUSE A DOUBLE REQUEST FOR TOKEN, TAKING OUT FOR NOW*/
-    return this.nextSong();
+    return this.postRequest(nextSongEndpoint);
   }
-  
+
   requestPreviousSong() {
-    return this.previousSong();
+    return this.postRequest(previousSongEndpoint);
+  }
+
+  requestPauseSong() {
+    return this.putRequest(pauseSongEndpoint);
+  }
+
+  requestPlaySong() {
+    return this.putRequest(playSongEndpoint);
   }
 
   getSpotifyData() {
@@ -73,23 +86,23 @@ module.exports = class SpotifyConnector {
 
     return request.get(options);
   }
-  
-  nextSong() {
+
+  postRequest(postEndpoint) {
     let options = {
-      url: nextSongEndpoint,
+      url: postEndpoint,
       headers: {'Authorization': 'Bearer ' + this.credentials.accessToken},
       json: true
     };
     return request.post(options);
   }
-  
-  previousSong() {
+
+  putRequest(postEndpoint) {
     let options = {
-      url: previousSongEndpoint,
+      url: postEndpoint,
       headers: {'Authorization': 'Bearer ' + this.credentials.accessToken},
       json: true
     };
-    return request.post(options);
+    return request.put(options);
   }
 
   refreshAccessToken() {

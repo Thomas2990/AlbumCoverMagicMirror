@@ -38,14 +38,18 @@ module.exports = NodeHelper.create({
 	this.authorizer = new Authorizer();
 	this.authorizer.startServer();
         break;
-		    
       case 'NEXT_SONG':
-	 this.requestNextSong();
-         break;
-    
+	this.requestNextSong();
+        break;
       case 'PREVIOUS_SONG':
-         this.requestPreviousSong();
-         break;
+        this.requestPreviousSong();
+        break;
+      case 'PAUSE_SONG':
+	this.requestPauseSong();
+	break;
+      case 'PLAY_SONG':
+	this.requestPlaySong();
+	break;
     }
   },
 
@@ -90,20 +94,28 @@ module.exports = NodeHelper.create({
         album: songInfo.item.album.name,
         titleLength: songInfo.item.duration_ms,
         progress: songInfo.progress_ms,
-        isPlaying: songInfo.isPlaying,
+        isPlaying: songInfo.is_playing,
         deviceName: songInfo.device.name
       };
     }
 
     this.sendSocketNotification('RETRIEVED_SONG_DATA', payload);
   },
-  
+
   requestNextSong: function() {
     this.connector.requestNextSong();
   },
-	
+
   requestPreviousSong: function() {
     this.connector.requestPreviousSong();
+  },
+
+  requestPauseSong: function() {
+    this.connector.requestPauseSong();
+  },
+
+  requestPlaySong: function() {
+    this.connector.requestPlaySong();
   },
 
   getArtistName: function (artists) {

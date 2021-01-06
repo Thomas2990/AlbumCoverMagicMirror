@@ -25,6 +25,8 @@ Module.register("MMM-websocket", {
 		var self = this;
 		self.debug("Starting module: " + self.name);
 		self.sendSocketNotification("WS_CONNECT", { "config": self.config });
+		self.firebaseURLPrefix = 'https://digitalvinyl-6ac43-default-rtdb.firebaseio.com/UserData/';
+		self.firebaseURLSuffix = '.json';
 	},
 
 	// Override notification received
@@ -40,6 +42,26 @@ Module.register("MMM-websocket", {
 			self.sendSocketNotification(notification, payload);
 		} else if(notification === "STATE_PAYLOAD_FINISHED") {
 			self.sendSocketNotification(notification, payload);
+		} else if(notification === "UPLOAD_IP") {
+			console.log("UPLOAD_IP");
+			console.log(payload);
+	 		var localIP = JSON.stringify(payload.ip);
+	 		const userAction = async () => {
+	  			const response = await fetch((this.firebaseURLPrefix + payload.sn + this.firebaseURLSuffix), {
+    	  				method: 'PUT',
+    					body: localIP, // string or object
+    						headers: {
+      						'Content-Type': 'application/json'
+    					}
+  				});
+  				const myJson = await response.json(); //extract JSON from the http response
+  				console.log(myJson);// do something with myJson
+			 }
+			 userAction();
+		} else if(notification === "ALL_MODULES_STARTED") {
+			setTimeout(function () {
+				self.sendNotification("ONSCREENMENU_PROCESS_ACTION", "findIP");
+			}, 10000);
 		}
 		//} else {
 		//	self.debug("Unwanted outgoing global notification: ", notification, payload);
@@ -49,7 +71,9 @@ Module.register("MMM-websocket", {
 	// Override socket notification received
 	socketNotificationReceived: function(notification, payload) {
 		var self = this;
-
+		if (notification === "SEND_IP") {
+			this.sendNotification("UPLOAD_IP", payload);
+		}
 		// Check if notification is wanted
 		if (self.executeFilter(self.config.incomingFilter, notification, payload)) {
 			self.debug("Wanted incoming socket notification: ", notification, payload);

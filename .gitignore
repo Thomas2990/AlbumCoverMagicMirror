@@ -2,6 +2,7 @@
 #personal user files
 spotifyConfig.json
 spotifyConfig2.json
+serial_number.json
 
 logs
 *.log

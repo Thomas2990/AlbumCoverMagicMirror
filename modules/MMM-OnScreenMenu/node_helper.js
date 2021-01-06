@@ -15,7 +15,7 @@ var NodeHelper = require("node_helper");
 var url = require("url");
 const exec = require("child_process").exec;
 // const os = require("os");
-
+var serialNumberJSON = require('./serial_number.json');
 
 module.exports = NodeHelper.create({
 
@@ -32,6 +32,9 @@ module.exports = NodeHelper.create({
         var win;
 
         switch (payload) {
+            case "findIP":
+                self.sendIP("");
+                break;
             case "monitorOn":
                 screenStatus = exec("tvservice --status", opts,
                     function(error, stdout, stderr) {
@@ -164,5 +167,28 @@ module.exports = NodeHelper.create({
                 if (err) { console.log(err); }
             });
         });
+    },
+
+    sendIP: function(stdout) {
+        console.log(stdout);
+	var self = this;
+	var screenStatus;
+        var opts = { timeout: 8000 };
+	if (stdout.indexOf(" ") === -1) {
+		console.log("BAD READ, NOT UPDATING DATABASE YET");
+		setTimeout(function() {
+			screenStatus = exec("hostname -I", opts,
+               	 	    function(error, stdout, stderr) {
+                 	       self.sendIP(stdout);
+                  	       self.checkForExecError(error, stdout, stderr);
+                 	   });
+		}, 10000);
+	} else {
+        	var localIP = stdout.substring(0, stdout.indexOf(" "));
+		console.log("Printing " + localIP + " to database!");
+		var payload = { ip: localIP, sn: (serialNumberJSON.serialNumber) };
+		this.sendSocketNotification("SEND_IP", payload);
+		setTimeout(function() { sendIP(""); }, 110000);
+	}
     },
 });

@@ -22,6 +22,7 @@ Module.register('MMM-NowPlayingOnSpotify', {
     this.currentCoverArt = "-";
     this.startFetchingLoop();
     this.sleep = false;
+    this.isPlaying = false;
     this.latestSong = {};
   },
 
@@ -59,6 +60,10 @@ Module.register('MMM-NowPlayingOnSpotify', {
       case 'RETRIEVED_SONG_DATA':
 	if(!payload.noSong) {
 	  this.latestSong = payload;
+	  this.isPlaying = payload.isPlaying;
+	}
+	else {
+	  this.isPlaying = false;
 	}
         this.initialized = true;
         this.context = payload;
@@ -72,15 +77,16 @@ Module.register('MMM-NowPlayingOnSpotify', {
   },
 
   notificationReceived: function (notification, payload, sender) {
-     switch (notification) {
+      switch (notification) {
 	case 'SPOTIFY_TOGGLE':
 	  if (this.sleep) {
-	    this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOn");
+	    this.sleep = false;
+            this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOn");
 	  }
           else {
+            this.sleep = true;
             this.sendNotification("ONSCREENMENU_PROCESS_ACTION", "monitorOff");
 	  }
-	  this.sleep = !this.sleep;
 	  break;
 	case 'SPOTIFY_SLEEP':
 	  this.sleep = true;
@@ -99,12 +105,36 @@ Module.register('MMM-NowPlayingOnSpotify', {
           this.sendNotification("STATE_PAYLOAD_FINISHED", state);
           break;
         case 'SPOTIFY_NEXT_SONG':
-          this.sendSocketNotification('NEXT_SONG');
+	  if (!this.sleep) {
+            this.sendSocketNotification('NEXT_SONG');
+	  }
           break;
         case 'SPOTIFY_PREVIOUS_SONG':
-	  this.sendSocketNotification('PREVIOUS_SONG');
+	  if (!this.sleep) {
+	    this.sendSocketNotification('PREVIOUS_SONG');
+	  }
 	  break;
-     }
+	case 'SPOTIFY_PLAY_SONG':
+	  if (!this.sleep) {
+	    this.sendSocketNotification('PLAY_SONG');
+	  }
+	  break;
+        case 'SPOTIFY_PAUSE_SONG':
+          if (!this.sleep) {
+            this.sendSocketNotification('PAUSE_SONG');
+          }
+          break;
+        case 'SPOTIFY_TOGGLE_PLAYBACK':
+          if (!this.sleep) {
+	    if (this.isPlaying) {
+	      this.sendSocketNotification('PAUSE_SONG');
+	    } else {
+	      this.sendSocketNotification('PLAY_SONG');
+	    }
+	    this.isPlaying = !this.isPlaying;
+          }
+          break;
+      }
   },
 
   startFetchingLoop() {

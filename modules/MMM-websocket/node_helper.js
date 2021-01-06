@@ -10,7 +10,6 @@ const NodeHelper = require("node_helper");
 const WebSocket = require("ws");
 const Server = require("ws").Server;
 
-
 module.exports = NodeHelper.create({
 	socketNotificationReceived: function (notification, payload) {
 		var self = this;
@@ -25,9 +24,7 @@ module.exports = NodeHelper.create({
 			self.config = undefined;
 			self.disconnect();
 			return;
-		}
-
-		// Forward all other socket notifications
+		} // Forward all other socket notifications
 		if(self.ws) {
 			const obj = {
 				type: notification,
@@ -102,6 +99,15 @@ module.exports = NodeHelper.create({
 			   break;
 			case "previous":
 			   self.sendSocketNotification("SPOTIFY_PREVIOUS_SONG", "");
+			   break;
+			case "play":
+			   self.sendSocketNotification("SPOTIFY_PLAY_SONG", "");
+			   break;
+			case "pause":
+			   self.sendSocketNotification("SPOTIFY_PAUSE_SONG", "");
+			   break;
+			case "togglePlayback":
+			   self.sendSocketNotification("SPOTIFY_TOGGLE_PLAYBACK", "");
 			   break;
 			default:
 			   break;

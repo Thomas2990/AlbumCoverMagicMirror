@@ -92,13 +92,15 @@ Module.register("MMM-OnScreenMenu", {
 
     // socketNotificationReceived from helper
     socketNotificationReceived: function(notification, payload) {
-        // console.log("Working notification system. Notification:", notification, "payload: ", payload);
+        console.log("Working notification system. Notification:", notification, "payload: ", payload);
         if (notification === "RESTART") {
             setTimeout(function() {
                 document.location.reload();
                 console.log('Delayed REFRESH');
             }, 45000);
-        }
+        } else if (notification === "SEND_IP") {
+	    this.sendNotification("UPLOAD_IP", payload);
+	}
     },
 
     notificationReceived: function(notification, payload, sender) {
@@ -112,7 +114,7 @@ Module.register("MMM-OnScreenMenu", {
             // do nothing
         }
         if (notification === "ALL_MODULES_STARTED") {
-            // do nothing
+
         }
         if (notification === "ONSCREENMENU_PROCESS_ACTION") {
             this.doMenuAction(payload);
@@ -158,7 +160,7 @@ Module.register("MMM-OnScreenMenu", {
     toggleMenu: function(forceClose) {
         var menu = document.getElementById("osm" + this.config.menuName);
         // console.log(`Hovering: ${this.hovering}, Manual: ${this.manualOpen}, Open: ${this.menuOpen}, forceClose: ${forceClose}`);
-        if (forceClose || this.manualOpen) {
+        /*if (forceClose || this.manualOpen) {
             this.clearSelection();
             menu.classList.remove("openMenu");
             this.manualOpen = false;
@@ -172,7 +174,7 @@ Module.register("MMM-OnScreenMenu", {
             this.menuOpen = true;
             this.manualOpen = true;
             return;
-        }
+        }*/
     },
 
     doMenuActionCB: function() {
@@ -195,7 +197,7 @@ Module.register("MMM-OnScreenMenu", {
 
         console.log(`OSM Menu Item Clicked: ${actionName}\n${JSON.stringify(actionDetail)}`);
 
-        var nodeActions = ["monitorOn", "monitorOff", "monitorToggle", "restart", "reboot", "shutdown", "stop", "minimize", "toggleFullscreen", "openDevTools", "update"];
+        var nodeActions = ["monitorOn", "monitorOff", "monitorToggle", "restart", "reboot", "shutdown", "stop", "minimize", "toggleFullscreen", "openDevTools", "update", "findIP"];
 
         // Module Actions
         if (actionName.startsWith("module")) {
