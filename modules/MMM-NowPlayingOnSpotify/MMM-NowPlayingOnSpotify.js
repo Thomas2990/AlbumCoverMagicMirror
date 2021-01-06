@@ -23,7 +23,9 @@ Module.register('MMM-NowPlayingOnSpotify', {
     this.startFetchingLoop();
     this.sleep = false;
     this.isPlaying = false;
+    this.volumePct = 0;
     this.latestSong = {};
+    this.VOLUME_CHANGE = 15;
   },
 
   getDom: function () {
@@ -61,6 +63,9 @@ Module.register('MMM-NowPlayingOnSpotify', {
 	if(!payload.noSong) {
 	  this.latestSong = payload;
 	  this.isPlaying = payload.isPlaying;
+	  if (payload.volumePct != null) {
+	    this.volumePct = payload.volumePct;
+  	  }
 	}
 	else {
 	  this.isPlaying = false;
@@ -133,6 +138,26 @@ Module.register('MMM-NowPlayingOnSpotify', {
 	    }
 	    this.isPlaying = !this.isPlaying;
           }
+          break;
+	case 'SPOTIFY_RAISE_VOLUME':
+	  console.log("RAISE VOLUME");
+	  console.log(this.volumePct);
+	  if (!(this.sleep || this.volumePct == null)) {
+	    if (this.volumePct <= (100 - this.VOLUME_CHANGE)) {
+	      this.sendSocketNotification('CHANGE_VOLUME', (this.volumePct + this.VOLUME_CHANGE));
+	    } else {
+	      this.sendSocketNotification('CHANGE_VOLUME', 100);
+	    }
+	  }
+	  break;
+	case 'SPOTIFY_LOWER_VOLUME':
+	  if (!(this.sleep || this.volumePct == null)) {
+	    if (this.volumePct >= this.VOLUME_CHANGE) {
+              this.sendSocketNotification('CHANGE_VOLUME', (this.volumePct - this.VOLUME_CHANGE));
+	    } else {
+              this.sendSocketNotification('CHANGE_VOLUME', 0);
+	    }
+	  }
           break;
       }
   },

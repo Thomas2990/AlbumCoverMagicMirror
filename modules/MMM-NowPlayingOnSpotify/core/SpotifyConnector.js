@@ -10,6 +10,7 @@ const previousSongEndpoint = 'https://api.spotify.com/v1/me/player/previous';
 const pauseSongEndpoint = 'https://api.spotify.com/v1/me/player/pause';
 const playSongEndpoint = 'https://api.spotify.com/v1/me/player/play';
 const playerEndpoint = 'https://api.spotify.com/v1/me/player/';
+const changeVolumeEndpoint = 'https://api.spotify.com/v1/me/player/volume?volume_percent=';
 const play = 'play';
 const pause = 'pause';
 
@@ -75,6 +76,10 @@ module.exports = class SpotifyConnector {
 
   requestPlaySong() {
     return this.putRequest(playSongEndpoint);
+  }
+
+  requestChangeVolume(volumePct) {
+    return this.putRequest(changeVolumeEndpoint + volumePct);
   }
 
   getSpotifyData() {

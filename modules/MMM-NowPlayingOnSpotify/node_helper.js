@@ -50,6 +50,9 @@ module.exports = NodeHelper.create({
       case 'PLAY_SONG':
 	this.requestPlaySong();
 	break;
+      case 'CHANGE_VOLUME':
+	this.requestChangeVolume(payload);
+	break;
     }
   },
 
@@ -95,7 +98,8 @@ module.exports = NodeHelper.create({
         titleLength: songInfo.item.duration_ms,
         progress: songInfo.progress_ms,
         isPlaying: songInfo.is_playing,
-        deviceName: songInfo.device.name
+        deviceName: songInfo.device.name,
+	volumePct: songInfo.device.volume_percent
       };
     }
 
@@ -116,6 +120,10 @@ module.exports = NodeHelper.create({
 
   requestPlaySong: function() {
     this.connector.requestPlaySong();
+  },
+
+  requestChangeVolume: function(volumePct) {
+    this.connector.requestChangeVolume(volumePct);
   },
 
   getArtistName: function (artists) {
